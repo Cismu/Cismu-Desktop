@@ -67,11 +67,7 @@ export class CismuPermissionError extends CismuError {
 export class CismuUnknownError extends CismuError {
   description: string;
 
-  constructor(
-    name: string = "Unknown Error",
-    description: string = "Unknown Error",
-    error?: Error
-  ) {
+  constructor(name: string = "Unknown Error", description: string = "Unknown Error", error?: Error) {
     const message = "Unknown Error" || error.message;
     super(message);
     this.description = description;
@@ -145,3 +141,8 @@ export class CismuInvalidConfig extends CismuError {
     this.name = name;
   }
 }
+
+export const Warnings = {
+  HWAccDisabled:
+    "Hardware acceleration has been disabled, for more information check https://support.cismu.org/hardware-acceleration",
+};

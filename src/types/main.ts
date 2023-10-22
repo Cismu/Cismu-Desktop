@@ -1,9 +1,4 @@
 import { Rectangle } from "electron";
-import Config from "../main/modules/Config";
-import Database from "../main/modules/Database";
-import FFmpeg from "../main/modules/FFmpeg";
-import IPCMain from "../main/modules/IPCMain";
-import Storage from "../main/modules/Storage";
 
 export type WritableData = number | string | boolean | null | undefined | symbol | NodeJS.ArrayBufferView;
 
@@ -59,14 +54,3 @@ export interface FFprobeData {
     sample_rate: number;
   };
 }
-
-export interface IModuleTypes {
-  config: Config;
-  ipcmain: IPCMain;
-  ffmpeg: FFmpeg;
-  storage: Storage;
-  database: Database;
-}
-
-export type TModuleName = keyof IModuleTypes;
-export type TModuleTypes = IModuleTypes[TModuleName];

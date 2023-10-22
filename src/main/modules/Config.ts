@@ -24,7 +24,7 @@ class Config {
   private cfgPath: string;
 
   constructor() {
-    logger.log("Instantiating Config module");
+    logger.debug("Instantiating Config module");
 
     this.jtd = new Jtd();
     const schema = getSchema();
@@ -70,7 +70,7 @@ class Config {
       this._validate();
     } else {
       app.once("ready", () => {
-        logger.log("Event Ready from: Config Module");
+        logger.debug("Event Ready from: Config Module");
         this._validate();
       });
     }
@@ -82,7 +82,7 @@ class Config {
    * @return {Promise<void>} - A promise that resolves when the initialization is complete.
    */
   async init() {
-    logger.log("Initialization of the Config module has been successfully completed");
+    logger.debug("Initialization of the Config module has been successfully completed");
     this.lastModified = this._getLastModified();
 
     try {
@@ -133,7 +133,7 @@ class Config {
 
       this.lastModified = this._getLastModified();
     } catch (error) {
-      logger.error("An error occurred while saving the configuration", error);
+      logger.error("An error occurred while saving the configuration");
     }
   }
 

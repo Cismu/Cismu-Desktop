@@ -40,6 +40,14 @@ const config: ForgeConfig = {
               js: "./src/windows/mini_player/preload.ts",
             },
           },
+          {
+            name: "setup_window",
+            html: "./src/windows/setup_window/index.html",
+            js: "./src/windows/setup_window/renderer.ts",
+            preload: {
+              js: "./src/windows/setup_window/preload.ts",
+            },
+          },
         ],
       },
     }),

@@ -6,13 +6,6 @@ import logger from "./logger";
 import path from "path";
 import fs from "./fs";
 
-export function parseCLIArgs() {
-  return {
-    "hardware-acceleration": !process.argv.includes("--disable-hardware-acceleration"),
-    "repair-restart": process.argv.includes("--repair-restart"),
-  };
-}
-
 export function cloneDeep<T>(value: T): T {
   try {
     if (fs.isPrimitive(value)) {

@@ -16,7 +16,7 @@ export const mainConfig: Configuration = {
   module: {
     rules,
   },
-  externals: ["better-sqlite3"],
+  externals: ["better-sqlite3", "commonjs2 fluent-ffmpeg"],
   plugins: [
     new CopyPlugin({
       patterns: [
@@ -33,5 +33,8 @@ export const mainConfig: Configuration = {
   ],
   resolve: {
     extensions: [".js", ".ts", ".jsx", ".tsx", ".css", ".json"],
+    alias: {
+      "fluent-ffmpeg": "fluent-ffmpeg/lib/fluent-ffmpeg.js",
+    },
   },
 };

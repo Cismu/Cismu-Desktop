@@ -49,7 +49,7 @@ export async function setup(): Promise<void> {
 
 export async function testing(): Promise<boolean> {
   try {
-    logger.log("Initiating start-up tests...");
+    logger.debug("Initiating start-up tests...");
 
     const folderPaths = [
       paths.folders.root,
@@ -106,7 +106,7 @@ export async function testing(): Promise<boolean> {
 
 export async function repair(): Promise<boolean> {
   try {
-    logger.log("Initiating repair...");
+    logger.debug("Initiating repair...");
 
     async function exec(command: string) {
       return await new Promise((resolve, reject) => {
@@ -141,7 +141,7 @@ export async function repair(): Promise<boolean> {
       fs.moveSync(userDataBackup, path.join(paths.folders.cache, uuid()));
     }
 
-    logger.log("Repair completed");
+    logger.debug("Repair completed");
 
     return true;
   } catch (error) {

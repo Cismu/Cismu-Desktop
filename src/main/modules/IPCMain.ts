@@ -20,7 +20,7 @@ class IPCMain {
   config: Config;
 
   constructor(ffmpeg: FFmpeg, config: Config) {
-    logger.log("Instantiating IpcMain module");
+    logger.debug("Instantiating IpcMain module");
     this.ffmpeg = ffmpeg;
     this.config = config;
 
@@ -56,7 +56,7 @@ class IPCMain {
   }
 
   async init() {
-    logger.log("Registering Events...");
+    logger.debug("Registering Events...");
     const initTime = new Date().getTime();
 
     for (let x = 0; x < this.events.length; x++) {
@@ -76,12 +76,12 @@ class IPCMain {
         }
       }
 
-      logger.log(`${colors.blue(event.name)} successfully registered`);
+      logger.debug(`${colors.blue(event.name)} successfully registered`);
     }
 
     const endTime = (new Date().getTime() - initTime) / 1000;
 
-    logger.log(`The initialization of the IpcMain module has been successfully completed in ${endTime}ms`);
+    logger.debug(`The initialization of the IpcMain module has been successfully completed in ${endTime}ms`);
   }
 }
 

@@ -1,0 +1,218 @@
+// import "./constants";
+// import { CismuError, CismuStartupError, CismuRepairError } from "./errors";
+// import { abort, reboot, repair } from "./startup";
+// import { bootstrap } from "./bootstrap";
+// import { parseCLIArgs } from "./utils";
+// import logger from "./logger";
+// import IoCContainer from "./modules/IoCContainer";
+// import Database from "./modules/Database";
+// import Storage from "./modules/Storage";
+// import IPCMain from "./modules/IPCMain";
+// import Config from "./modules/Config";
+// import FFmpeg from "./modules/FFmpeg";
+
+// registerListeners(); // Global listeners
+
+// let mainWindow: BrowserWindow;
+
+
+
+// function createMainWindow() {
+//   // Create the browser window.
+//   mainWindow = new BrowserWindow({
+//     height: 600,
+//     width: 800,
+//     webPreferences: {
+//       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+//     },
+//   });
+
+//   // and load the index.html of the app.
+//   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+
+//   if (isDevelopment) {
+//     // Open the DevTools.
+//     mainWindow.webContents.openDevTools();
+//   }
+// }
+
+// if (args["repair-restart"]) {
+//   repair()
+//     .then((repaired) => {
+//       if (repaired) {
+//         reboot({ removeArgs: ["--repair-restart"] });
+//       } else {
+//         abort(new CismuRepairError());
+//       }
+//     })
+//     .catch((error) => {
+//       logger.error(error);
+//       abort(new CismuRepairError());
+//     });
+// } else {
+//   bootstrap()
+//     .then(async () => {
+//       logger.log("Application started successfully, all modules were loaded successfully");
+
+//       if (app.isReady()) onReady();
+//       else app.once("ready", () => onReady());
+//     })
+//     .catch((error) => {
+//       logger.error("An error occurred at application startup");
+
+//       if (error instanceof CismuError) {
+//         logger.crit(error);
+//       } else {
+//         logger.crit(new CismuStartupError(error));
+//       }
+
+//       app.exit(1);
+//     });
+// }
+
+// function onReady() {
+//   const setupWindows = new BrowserWindow();
+//   setupWindows.loadURL(SETUP_WINDOW_WEBPACK_ENTRY);
+//   setupWindows.webContents.openDevTools();
+//   console.log("Holaa");
+//   // createMainWindow();
+// }
+
+// /**
+//  * Registers event listeners for the application.
+//  */
+// function registerListeners() {
+//   app.on("window-all-closed", () => {
+//     if (process.platform !== "darwin") {
+//       app.quit();
+//     }
+//   });
+
+//   app.on("activate", () => {
+//     if (BrowserWindow.getAllWindows().length === 0) {
+//       // createMainWindow();
+//     }
+//   });
+// }
+
+
+
+// import { format } from "util";
+// import colors from "colors";
+// import { CismuError } from "./errors";
+
+// interface IScales {
+//   DEBUG: number;
+//   INFO: number;
+//   WARN: number;
+//   ERROR: number;
+//   CRITICAL: number;
+//   OFF: number;
+// }
+
+// const SCALES: IScales = {
+//   DEBUG: 0,
+//   INFO: 10,
+//   WARN: 20,
+//   ERROR: 30,
+//   CRITICAL: 40,
+//   OFF: 50,
+// };
+
+// class Logger {
+//   // Public properties:
+//   timestamp: number;
+
+//   // Private properties:
+//   private static instance: Logger;
+//   private scale: keyof IScales;
+
+//   constructor() {
+//     this.timestamp = new Date().getTime();
+//     this.scale = "WARN";
+
+//     // Handle the errors but I shouldn't do anything here, or I can warn the user with a dialog, but I have to see.
+//     // SEE LATER
+//     process.on("unhandledRejection", (reason: string) =>
+//       this.crit(`Unhandled Rejection at Promise ${reason}`)
+//     );
+
+//     process.on("uncaughtException", (err, origin) =>
+//       this.crit(`Uncaught Exception thrown: ${err.message}\n${origin}`)
+//     );
+//   }
+
+//   debug(message: string, options?: { plain: boolean }) {
+//     if (!(SCALES[this.scale] <= SCALES["DEBUG"])) return;
+
+//     if (options && options.plain) {
+//       console.log(message);
+//     } else {
+//       console.log(colors.blue(`[${this.time}] | DEBUG |  [${message}]`));
+//     }
+//   }
+
+//   info(message: string, options?: { plain?: boolean; template?: boolean }) {
+//     if (!(SCALES[this.scale] <= SCALES["INFO"])) return;
+
+//     if (options && options.plain) {
+//       console.log(message);
+//     } else if (options && options.template) {
+//       if (message.includes("%s")) console.log(format(message, this.time));
+//       else console.log(message);
+//     } else {
+//       console.log(colors.white(`[${this.time}] | LOG |  [${message}]`));
+//     }
+//   }
+
+//   warn(message: string, options?: { plain: boolean }) {
+//     if (!(SCALES[this.scale] <= SCALES["WARN"])) return;
+
+//     if (options && options.plain) {
+//       console.log(message);
+//     } else {
+//       console.log(colors.yellow(`[${this.time}] | WARNING |  [${message}]`));
+//     }
+//   }
+
+//   error(message: string, options?: { plain: boolean }) {
+//     if (!(SCALES[this.scale] <= SCALES["ERROR"])) return;
+
+//     if (options && options.plain) {
+//       console.log(message);
+//     } else {
+//       console.log(colors.red(`[${this.time}] | ERROR |  [${message}]`));
+//     }
+//   }
+
+//   crit(message: string | CismuError, options?: { plain: boolean }) {
+//     if (!(SCALES[this.scale] <= SCALES["CRITICAL"])) return;
+
+//     if (message instanceof CismuError) {
+//       console.log(colors.magenta(`[${this.time}] | CRITICAL |  [${message.name}]`));
+//       console.log(colors.magenta(message.message));
+//       console.log(colors.magenta(message.description));
+//       console.log(colors.magenta(message.stack));
+//     } else {
+//       if (options && options.plain) {
+//         console.log(message);
+//       } else {
+//         console.log(colors.magenta(`[${this.time}] | CRITICAL |  [${message}]`));
+//       }
+//     }
+//   }
+
+//   private get time() {
+//     return (new Date().getTime() - this.timestamp) / 1000;
+//   }
+
+//   static getInstance(): Logger {
+//     if (!this.instance) {
+//       this.instance = new Logger();
+//     }
+
+//     return this.instance;
+//   }
+// }
+
+// export default Logger;

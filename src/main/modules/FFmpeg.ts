@@ -1,13 +1,14 @@
-import FluentFFmpeg, { FfprobeData } from "fluent-ffmpeg";
+import { FfprobeData } from "fluent-ffmpeg";
+import FluentFFmpeg from "fluent-ffmpeg";
 import { join, resolve } from "path";
 import { platform, arch } from "os";
 import { app } from "electron";
 
-import { FFprobeID3, TFormatsSoported, FFprobeData } from "../../types/main";
+import { FFprobeID3, FFprobeData } from "../../types/main";
 import { getTempPath } from "../utils";
-import logger from "../logger";
-import Storage from "./Storage";
 import { paths } from "../constants";
+import Storage from "./Storage";
+import logger from "../logger";
 
 class FFmpeg {
   ffmpeg: typeof FluentFFmpeg;
